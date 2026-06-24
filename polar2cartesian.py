@@ -1,12 +1,14 @@
 import os, math, json
 import pandas as pd
 import numpy as np
+import sys
 
-files = sorted([f for f in os.listdir('.') if f.endswith('.txt')])
+dir=str(sys.argv[1])
+files = sorted([dir+"/"+f for f in os.listdir(dir) if f.endswith('.txt')])
 
 scans = []
 for f in files:
-    epoch_ms = int(f.replace('.txt',''))
+    epoch_ms = int(f.replace(dir+"/",'').replace('.txt',''))
     df = pd.read_csv(f'{f}', sep='\t', header=None,
                      names=['flag','intensity','angle_deg','distance_mm'])
     # Convert polar to Cartesian (standard math convention: 0° = East, CCW)
@@ -19,4 +21,4 @@ for f in files:
 
 scans=np.array(scans)
 print(scans.shape)
-np.save("lidar_scans_cartesian.npy",scans)
+np.save(dir+"/lidar_scans_cartesian.npy",scans)
