@@ -5,13 +5,14 @@ import matplotlib.pyplot as plt
 import math
 import numpy as np
 import time
+import os
 
 PORT_NAME = '/dev/tty.usbserial-0001'
 
 def run(j_max):
 	epoch_time=str(int(round(time.time()*1000)))
-	path=epoch_time+".txt"
-	path_fig=epoch_time+".png"
+	path=dir+epoch_time+".txt"
+	path_fig=dir+epoch_time+".png"
 	#df= pd.DataFrame(columns=["angle","distance"])
 	data=[]
 	lidar = RPLidar(PORT_NAME)
@@ -54,7 +55,11 @@ def stop(l,o):
 	l.disconnect()
 	
 if __name__ == '__main__':
-	time.sleep(int(sys.argv[2]))
-	while True:
+	dir=str(sys.argv[1])+'/'
+	try:
+		os.makedirs(dir)
+	finally:
 		time.sleep(int(sys.argv[3]))
-		run(sys.argv[1])
+		while True:
+			time.sleep(int(sys.argv[4]))
+			run(sys.argv[2])
